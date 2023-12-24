@@ -1,0 +1,25 @@
+http:
+  host: 'localhost'
+  port: 8080
+
+db:
+  postgres:
+    url: ${DATABASE_HOST}
+    port: 5432
+    database: 'yaml-db'
+
+  sqlite:
+    database: 'sqlite.db'
+
+  mongo: 
+    database: nest
+    host: localhost
+
+  default:
+    type: mysql
+    host: ${DATABASE_HOST}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    port : 3306
+    database: 'test'
+    synchronize: true

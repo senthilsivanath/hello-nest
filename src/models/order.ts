@@ -20,8 +20,8 @@ export class Customer {
     age: number;
 
 
-    @OneToMany(() => Order, order => order.customer)
-    orders: Order[];
+    // @OneToMany(() => Order, order => order.customer)
+    // orders: Order[];
 }
 
 
@@ -36,12 +36,12 @@ export class Order {
     @Column({ default: null })
     description: string
 
-    @Column()
-    customerId: string;
+    // @Column()
+    // customerId: string;
 
-    @ManyToOne(type => Customer, customer => customer.orders)
-    @JoinColumn({ name: "customerId" })
-    customer: Customer;
+    // @ManyToOne(type => Customer, customer => customer.orders)
+    // @JoinColumn({ name: "customerId" })
+    // customer: Customer;
 
 
     @IsNotEmpty()

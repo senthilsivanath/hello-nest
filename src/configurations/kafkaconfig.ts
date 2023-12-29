@@ -1,7 +1,7 @@
 import { ClientProvider, Transport } from "@nestjs/microservices"
 import { Partitioners } from "kafkajs"
 
-export const kafkaConfig = (host: string, port: string) : ClientProvider=>{
+export const kafkaConfig = (host: string = "localhost", port: string) : ClientProvider=>{
     
     return {
         transport: Transport.KAFKA,

@@ -52,7 +52,7 @@ export class AppService {
       },
       relations: {
         orderlines: true,
-        customer: true,
+        // customer: true,
         deliveryAddress: true
       }
     })

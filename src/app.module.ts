@@ -13,7 +13,7 @@ import { Customer, Order, OrderLine } from './models/order';
 import { DeliveryAddress } from './models/delivery';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Student, StudentSchema } from './models/student';
-import { StudentRepository } from './repositories/student-repository';
+import { StudentRepository } from './repositories/student.repository';
 import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 import { Publisher } from './events/publisher';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -21,37 +21,28 @@ import { TypeOrmConfig } from './configurations/typeormconfig';
 import { MongoConfig } from './configurations/mongoconfig';
 import { ConsumerController } from './events/consumer';
 import { Partitioners } from 'kafkajs';
+import { kafkaConfig } from './configurations/kafkaconfig';
 
 @Module({
-  imports: [    
-    ClientsModule.register([
-      {
-        name: 'HERO_SERVICE',
-        transport: Transport.KAFKA,
-        options: {
-            producer: {
-                allowAutoTopicCreation: true,
-                createPartitioner: Partitioners.DefaultPartitioner
-            },
-            client: {
-                clientId: 'user',
-                brokers: ['localhost:29092'],
-            },
-            consumer: {
-                groupId: 'user-consume1',
-                allowAutoTopicCreation: true,
-            },
-
-        }
-      }]
-    ),
+  imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       load: [appconfiguration]
     }),
+    ClientsModule.registerAsync([
+      {
+        name: 'HERO_SERVICE',
+        useFactory:
+          (configService: ConfigService) =>
+          (kafkaConfig(configService.get<string>('kafka.host'),
+            configService.get<string>('kafka.port'))),
+        inject: [ConfigService],
+      },
+    ]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useClass: TypeOrmConfig     
+      useClass: TypeOrmConfig
     }),
     // this produces orderRepository
     TypeOrmModule.forFeature([Order]),

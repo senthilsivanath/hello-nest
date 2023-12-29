@@ -2,6 +2,10 @@ http:
   host: 'localhost'
   port: 8080
 
+kafka:
+  host: ${KAFKA_HOST:localhost}
+  port: ${KAFKA_PORT:9092}
+
 db:
   postgres:
     url: ${DATABASE_HOST}
@@ -13,13 +17,14 @@ db:
 
   mongo: 
     database: nest
-    host: localhost
+    host: 127.0.0.1
+    port: ${MONGO_PORT:27017}
 
   default:
     type: mysql
     host: ${DATABASE_HOST}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
-    port : 3306
+    port : ${DATABASE_PORT:3306}
     database: 'test'
     synchronize: true

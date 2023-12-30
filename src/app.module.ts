@@ -22,12 +22,20 @@ import { MongoConfig } from './configurations/mongoconfig';
 import { ConsumerController } from './events/consumer';
 import { Partitioners } from 'kafkajs';
 import { kafkaConfig } from './configurations/kafkaconfig';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AppGraphqlModule } from './app.graphql.module';
 
 @Module({
   imports: [
+    AppGraphqlModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appconfiguration]
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
     }),
     ClientsModule.registerAsync([
       {
@@ -38,7 +46,7 @@ import { kafkaConfig } from './configurations/kafkaconfig';
             configService.get<string>('kafka.port'))),
         inject: [ConfigService],
       },
-    ]),
+    ]),   
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -54,7 +62,7 @@ import { kafkaConfig } from './configurations/kafkaconfig';
     // this produces Model<Student> but manually a repo is layer is required to build symmetry between DB's
     MongooseModule.forFeature([{ name: Student.name, schema: StudentSchema }])
   ],
-  controllers: [AppController, ConsumerController],
+  controllers: [AppController, ], /// ConsumerController
   providers: [AppService, Publisher, SomeService, StudentRepository, {
     provide: APP_FILTER,
     useClass: HttpExceptionFilter,

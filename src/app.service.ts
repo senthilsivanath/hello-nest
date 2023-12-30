@@ -17,7 +17,7 @@ export class AppService {
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
     private studentRepository: StudentRepository,
-    private eventPublisher: Publisher
+    //private eventPublisher: Publisher
   ) {
 
   }
@@ -61,7 +61,7 @@ export class AppService {
   }
 
   async saveOrder(order: Order) {
-    await this.eventPublisher.sendMessage(12)
+    //await this.eventPublisher.sendMessage(12)
     let student = new Student()
     //const { ObjectId } = mongoose.Types;
     //student.studentId = new mongoose.Types.ObjectId("64b0ee2c189286a5abc6b4ba").toString()

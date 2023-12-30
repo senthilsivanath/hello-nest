@@ -62,7 +62,7 @@ import { AppGraphqlModule } from './app.graphql.module';
     // this produces Model<Student> but manually a repo is layer is required to build symmetry between DB's
     MongooseModule.forFeature([{ name: Student.name, schema: StudentSchema }])
   ],
-  controllers: [AppController, ], /// ConsumerController
+  controllers: [AppController, ConsumerController], /// 
   providers: [AppService, Publisher, SomeService, StudentRepository, {
     provide: APP_FILTER,
     useClass: HttpExceptionFilter,

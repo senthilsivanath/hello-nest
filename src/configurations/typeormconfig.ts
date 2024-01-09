@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
-import { DeliveryAddress } from "src/models/delivery";
-import { Order, OrderLine, Customer } from "src/models/order";
+import { DeliveryAddress } from "../models/delivery";
+import { Order, OrderLine, Customer } from "../models/order";
 
 @Injectable()
 export class TypeOrmConfig implements TypeOrmOptionsFactory {
@@ -22,7 +22,7 @@ export class TypeOrmConfig implements TypeOrmOptionsFactory {
             database: this.configService.get('db.default.database'),
             // what has to be passed here is tricky, is it all models are connected models
             entities: [Order, OrderLine, Customer, DeliveryAddress],
-            synchronize: this.configService.get('TYPEORM_SYNCHRONIZE'),
+            synchronize: true // TODO make this to go with a config in env variable
         };
   
         return obj;

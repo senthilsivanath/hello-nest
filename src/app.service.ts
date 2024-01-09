@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { InjectModel } from '@nestjs/mongoose';
 import { Department, Student } from './models/student';
 import mongoose, { Model, ObjectId } from 'mongoose';
-import { StudentRepository } from './repositories/student-repository';
+import { StudentRepository } from './repositories/student.repository';
 import { Publisher } from './events/publisher';
 
 
@@ -35,23 +35,24 @@ export class AppService {
 
   async getOrder(orderId: string): Promise<Order> {
 
-    const student = await this.studentRepository.findById("65349e416dbd3d13b081ab56")
-    console.log(student)
+    // const student = await this.studentRepository.findById("65349e416dbd3d13b081ab56")
+    // console.log(student)
 
-    const students = await this.studentRepository.findAll("", "")
+    //const students = await this.studentRepository.findAll("", "")
 
-    console.log(students)
+    //console.log(students)
 
     //console.log(student["_id"])
     //student.studentId = new ObjectId(student["_id"].toString()).toHexString()
     //console.log(student._id.toHexString())
+    
     const orders = await this.orderRepository.find({
       where: {
         orderId,
       },
       relations: {
         orderlines: true,
-        customer: true,
+        // customer: true,
         deliveryAddress: true
       }
     })

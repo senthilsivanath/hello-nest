@@ -1,4 +1,4 @@
-import { BadGatewayException, Body, Controller, Delete, ForbiddenException, Get, Header, HttpCode, OnModuleInit, Param, Post, Put, Query, ValidationPipe } from '@nestjs/common';
+import { BadGatewayException, Body, Controller, Delete, ForbiddenException, Get, Header, HttpCode, Inject, OnModuleInit, Param, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Order } from './models/order';
 import { SomeService } from './configurations/someservice';
@@ -10,43 +10,30 @@ import { Partitioners } from 'kafkajs';
 
 @Controller("orders")
 export class AppController implements OnModuleInit {
-  constructor(private readonly appService: AppService, private readonly someService: SomeService) { }
+
+  @Get("health")
+  getHealth() {
+    return { "message": "ok" };
+  }
+
+  constructor(private readonly appService: AppService, 
+    private readonly someService: SomeService,
+    @Inject('HERO_SERVICE') private readonly kafkaClient: ClientKafka,) { }
 
   @Get(":orderId")
   getHello(@Param("orderId") orderId: string): Promise<Order> {
     return this.appService.getOrder(orderId);
   }
 
-  @Client({
-    transport: Transport.KAFKA,
-    options: {
-      producer: {
-        allowAutoTopicCreation: true,
-        createPartitioner: Partitioners.DefaultPartitioner
-      },
-      client: {
-        clientId: 'user',
-        brokers: ['localhost:29092'],
-      },
-      consumer: {
-        groupId: 'user-consume1',        
-        allowAutoTopicCreation: true,
-      },
-
-    }
-  })
-  client: ClientKafka;
-
- 
   async onModuleInit() {
     const requestPatterns = [
-      'user-topic3',     
+      'user-topic3',
     ];
 
-    await this.client.connect()
-    
+    await this.kafkaClient.connect()
+
     requestPatterns.forEach(pattern => {
-      this.client.subscribeToResponseOf(pattern);
+      this.kafkaClient.subscribeToResponseOf(pattern);
     });
 
   }
@@ -64,37 +51,8 @@ export class AppController implements OnModuleInit {
     return "param" + clientId;
   }
 
-  // @Get("orders/:id")
-  // getOrders(@Query('filters') filters): string {
-  //   return filters;
-  // }
-
   @Delete("orders/:id")
   delete(@Param('id') id): string {
     return "delete" + id;
   }
-
-  // @EventPattern('user-topic3', Transport.KAFKA)
-  // async handleEntityCreated(payload: any) {
-  //   console.log(JSON.stringify(payload) + ' in event pattern created');
-  //   //console.log(payload.value + ' created');
-  // }
-
-  // @EventPattern('user-topic3.reply', Transport.KAFKA)
-  // async handleEntityCreatedReply(payload: any) {
-  //   console.log(JSON.stringify(payload) + ' created');
-  //   //console.log(payload.value + ' created');
-  // }
-
-  // @MessagePattern('user-topic3', Transport.KAFKA)
-  // async handleEntityCreatedReplyMessageReply(payload: any) {
-  //   console.log(JSON.stringify(payload) + ' in message pattern created');
-  //   //console.log(payload.value + ' created');
-  // }
-
-  // @MessagePattern('user-topic3.reply', Transport.KAFKA)
-  // async handleEntityCreatedReplyMessage(payload: any) {
-  //   console.log(JSON.stringify(payload) + ' created');
-  //   //console.log(payload.value + ' created');
-  // }
 }

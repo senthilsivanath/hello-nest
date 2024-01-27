@@ -1,5 +1,5 @@
-import { Student } from "src/models/student";
-import { CrudRepository } from "./crud-repository";
+import { Student } from "../models/student";
+import { CrudRepository } from "./crud.repository";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";

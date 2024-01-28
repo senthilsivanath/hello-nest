@@ -42,7 +42,7 @@ export class AppController implements OnModuleInit {
   @Header('Location', '/redirect/url')
   @HttpCode(201)
   async createOrder(@Context() context: any, @Body() order: Order) {
-    await this.appService.saveOrder(order)
+    await this.appService.saveOrder(order)    
   }
 
 

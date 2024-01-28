@@ -20,11 +20,24 @@ db:
     host: 127.0.0.1
     port: ${MONGO_PORT:27017}
 
+  dynamo:
+    region: us-east-1
+    endpoint: http://localhost:28000
+    entity2ddl: create-only
+    defaultReadCapacityUnits: 5
+    defaultWriteCapacityUnits: 5
+    config:
+      Person:
+        tableName: person
+        keyField: personId
+        readCapacityUnits: 10
+        writeCapacityUnits: 10
+
   default:
     type: mysql
     host: ${DATABASE_HOST}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
     port : ${DATABASE_PORT:3306}
-    database: 'test'
+    database: test
     synchronize: true

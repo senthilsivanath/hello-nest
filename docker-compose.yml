@@ -1,5 +1,11 @@
 version: '3.8'
 services:
+  dynamo:
+    command: -jar DynamoDBLocal.jar -sharedDb
+    image: amazon/dynamodb-local:latest
+    container_name: dynamodb-auditor
+    ports:
+      - 28000:8000
   mysql:
     image: mysql:8.1.0  # You can use a different MySQL version if needed
     container_name: my-mysql-container  # Give your container a unique name
@@ -9,7 +15,7 @@ services:
       MYSQL_USER: root2  # Change this to your desired MySQL user
       MYSQL_PASSWORD: root3  # Change this to your desired MySQL user's password
     ports:
-      - "3306:3306"  # You can change the host port if necessary
+      - 3306:3306  # You can change the host port if necessary
     volumes:
       - /tmp/mysql-data:/var/lib/mysql  # Persist MySQL data on your host machine
   mongodb:

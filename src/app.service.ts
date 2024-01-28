@@ -8,6 +8,8 @@ import { Department, Student } from './models/student';
 import mongoose, { Model, ObjectId } from 'mongoose';
 import { StudentRepository } from './repositories/student.repository';
 import { Publisher } from './events/publisher';
+import { PersonRepository } from './repositories/person.repository';
+import { Person } from './models/person';
 
 
 @Injectable()
@@ -17,7 +19,8 @@ export class AppService {
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
     private studentRepository: StudentRepository,
-    private eventPublisher: Publisher
+    private eventPublisher: Publisher,
+    private personRepository: PersonRepository
   ) {
 
   }
@@ -29,7 +32,7 @@ export class AppService {
 
   async getOrders(): Promise<Order[]> {
 
-   
+
     return null
   }
 
@@ -45,7 +48,7 @@ export class AppService {
     //console.log(student["_id"])
     //student.studentId = new ObjectId(student["_id"].toString()).toHexString()
     //console.log(student._id.toHexString())
-    
+
     const orders = await this.orderRepository.find({
       where: {
         orderId,
@@ -56,6 +59,10 @@ export class AppService {
         deliveryAddress: true
       }
     })
+
+    const person = await this.personRepository.findById("Abcdef")
+
+    console.log(person)
 
     return orders[0]
   }
@@ -72,5 +79,10 @@ export class AppService {
     await this.studentRepository.save(student)
 
     await this.orderRepository.save(order)
+    let person = new Person()
+    person.personId = "Abcdef"
+    person.name = "adf"
+    person.age = 1234
+    await this.personRepository.save(person)
   }
 }

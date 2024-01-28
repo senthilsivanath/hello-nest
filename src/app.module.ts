@@ -22,6 +22,8 @@ import { MongoConfig } from './configurations/mongoconfig';
 import { ConsumerController } from './events/consumer';
 import { Partitioners } from 'kafkajs';
 import { kafkaConfig } from './configurations/kafkaconfig';
+import { DynamoDb } from './configurations/dynamoconfig';
+import { PersonRepository } from './repositories/person.repository';
 
 @Module({
   imports: [
@@ -55,7 +57,7 @@ import { kafkaConfig } from './configurations/kafkaconfig';
     MongooseModule.forFeature([{ name: Student.name, schema: StudentSchema }])
   ],
   controllers: [AppController, ConsumerController],
-  providers: [AppService, Publisher, SomeService, StudentRepository, {
+  providers: [AppService, Publisher, SomeService, DynamoDb, StudentRepository, PersonRepository, {
     provide: APP_FILTER,
     useClass: HttpExceptionFilter,
   },

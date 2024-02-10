@@ -7,7 +7,7 @@ import { DeleteCommand, GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 
 
 @Injectable()
-export class DynamoRepository<T extends object> implements CrudRepository<T, String>{
+export class DynamoRepository<T extends object> implements CrudRepository<T, string>{
 
     tableName: string
     keyField: string

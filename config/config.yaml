@@ -6,6 +6,13 @@ kafka:
   host: ${KAFKA_HOST:localhost}
   port: ${KAFKA_PORT:9092}
 
+rest:
+  default:
+    baseurl: http://baseurl.com
+    username: ${REST_DEFAULT_USERNAME}
+    password: ${REST_DEFAULT_PASSWORD}
+    apiKey: ${REST_DEFAULT_APIKEY}
+
 db:
   postgres:
     url: ${DATABASE_HOST}

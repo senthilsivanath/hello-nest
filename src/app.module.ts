@@ -24,6 +24,7 @@ import { Partitioners } from 'kafkajs';
 import { kafkaConfig } from './configurations/kafkaconfig';
 import { DynamoDb } from './configurations/dynamoconfig';
 import { PersonRepository } from './repositories/person.repository';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { PersonRepository } from './repositories/person.repository';
       inject: [ConfigService],
       useClass: TypeOrmConfig
     }),
+    HttpModule,
     // this produces orderRepository
     TypeOrmModule.forFeature([Order]),
     MongooseModule.forRootAsync({

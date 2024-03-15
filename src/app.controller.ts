@@ -1,4 +1,4 @@
-import { BadGatewayException, Body, Controller, Delete, ForbiddenException, Get, Header, HttpCode, Inject, OnModuleInit, Param, Post, Put, Query, ValidationPipe } from '@nestjs/common';
+import { BadGatewayException, Body, Controller, Delete, ForbiddenException, Get, Header, HttpCode, Inject, OnModuleInit, Param, Post, Put, ValidationPipe } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Order } from './models/order';
 import { SomeService } from './configurations/someservice';
@@ -6,22 +6,26 @@ import { RadicalException } from './exceptions/radical-exception';
 import { Context } from './configurations/user-decorator';
 import { Client, ClientKafka, EventPattern, MessagePattern, Payload, Transport } from '@nestjs/microservices';
 import { Partitioners } from 'kafkajs';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 
 
 @Controller("orders")
+@Resolver()
 export class AppController implements OnModuleInit {
 
   @Get("health")
-  getHealth() {
-    return { "message": "ok" };
+  @Query(() => String)
+  getHealth(): string {
+    return "hello"
   }
 
-  constructor(private readonly appService: AppService, 
-    private readonly someService: SomeService,
-    @Inject('HERO_SERVICE') private readonly kafkaClient: ClientKafka,) { }
+  constructor(private readonly appService: AppService,
+
+  ) { }
 
   @Get(":orderId")
-  getHello(@Param("orderId") orderId: string): Promise<Order> {
+  @Query(() => Order)
+  async getHello(@Param("orderId") @Args('orderId') orderId: string) {
     return this.appService.getOrder(orderId);
   }
 
@@ -30,11 +34,11 @@ export class AppController implements OnModuleInit {
       'user-topic3',
     ];
 
-    await this.kafkaClient.connect()
+    // await this.kafkaClient.connect()
 
-    requestPatterns.forEach(pattern => {
-      this.kafkaClient.subscribeToResponseOf(pattern);
-    });
+    // requestPatterns.forEach(pattern => {
+    //   this.kafkaClient.subscribeToResponseOf(pattern);
+    // });
 
   }
 
